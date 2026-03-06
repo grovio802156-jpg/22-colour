@@ -9,45 +9,51 @@ color:white;
 background:#1e293b;
 text-align:center;
 padding:15px;
-font-size:20px;
 }
 
-.warning{
+.warning-bar{
 background:#dc2626;
-padding:6px;
-text-align:center;
-font-size:12px;
+overflow:hidden;
+white-space:nowrap;
 }
 
-.winner{
+.warning-text{
+display:inline-block;
+padding-left:100%;
+animation:scroll 12s linear infinite;
+}
+
+@keyframes scroll{
+0%{transform:translateX(0)}
+100%{transform:translateX(-100%)}
+}
+
+.winner-bar{
 background:#111827;
-padding:8px;
+overflow:hidden;
+white-space:nowrap;
+}
+
+.winner-text{
+display:inline-block;
+padding-left:100%;
+animation:scroll2 15s linear infinite;
+}
+
+@keyframes scroll2{
+0%{transform:translateX(0)}
+100%{transform:translateX(-100%)}
 }
 
 .wallet{
-display:flex;
-gap:10px;
 padding:10px;
 }
 
-.box{
-flex:1;
+.balance-box{
 background:#1f2937;
-padding:10px;
+padding:15px;
 border-radius:10px;
 text-align:center;
-}
-
-.green{
-background:#16a34a;
-}
-
-.red{
-background:#dc2626;
-}
-
-.section{
-padding-left:10px;
 }
 
 .games{
@@ -58,29 +64,18 @@ padding:10px;
 }
 
 .game{
-height:120px;
-border-radius:12px;
+height:110px;
+border-radius:10px;
 display:flex;
-align-items:flex-end;
-padding:10px;
-font-weight:bold;
+align-items:center;
+justify-content:center;
+font-size:18px;
 }
 
-.g1{
-background:linear-gradient(45deg,#22c55e,#4ade80);
-}
-
-.g2{
-background:linear-gradient(45deg,#9333ea,#c084fc);
-}
-
-.g3{
-background:linear-gradient(45deg,#2563eb,#60a5fa);
-}
-
-.g4{
-background:linear-gradient(45deg,#f59e0b,#fbbf24);
-}
+.g1{background:linear-gradient(#22c55e,#4ade80)}
+.g2{background:linear-gradient(#9333ea,#c084fc)}
+.g3{background:linear-gradient(#2563eb,#60a5fa)}
+.g4{background:linear-gradient(#f59e0b,#fbbf24)}
 
 .bottom{
 position:fixed;
@@ -90,5 +85,12 @@ background:#1e293b;
 display:flex;
 justify-content:space-around;
 padding:10px;
-font-size:12px;
+}
+
+.page{
+padding-bottom:80px;
+}
+
+.hidden{
+display:none;
 }
