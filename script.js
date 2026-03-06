@@ -1,3 +1,3 @@
-function play(){
-alert("Game Start");
+function playGame(name){
+alert(name + " game coming soon!");
 }
