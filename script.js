@@ -11,7 +11,8 @@ if(!user){
         phone: phone,
         id: id,
         ref: ref,
-        balance: 0
+        balance: 0,
+        history: [] // added history array
     };
     localStorage.setItem("user", JSON.stringify(user));
 }
@@ -39,6 +40,9 @@ function update(){
     document.getElementById("balance").innerText = "₹" + user.balance;
 }
 
+// ==========================
+// Logout
+// ==========================
 function logout(){
     localStorage.removeItem("user");
     location.reload();
@@ -85,6 +89,8 @@ gameContainer.innerHTML = `
 </div>
 <div id="timer">Timer: 30</div>
 <p id="result"></p>
+<h4>History</h4>
+<div id="gameHistory" style="text-align:left; max-height:150px; overflow:auto;"></div>
 `;
 document.body.appendChild(gameContainer);
 
@@ -101,8 +107,10 @@ for(let i=0; i<9; i++){
 let currentBet = 0;
 let timerInterval;
 let countdown = 30;
+let betLocked = false;
 
 function placeBet(amount){
+    if(betLocked) return; // lock after 5s
     if(user.balance < amount){
         alert("Low balance");
         return;
@@ -114,6 +122,7 @@ function placeBet(amount){
 }
 
 function placeCustomBet(){
+    if(betLocked) return;
     let val = parseInt(document.getElementById("customBet").value);
     if(!val || val<=0){
         alert("Enter valid amount");
@@ -133,10 +142,14 @@ function startGame(){
     document.getElementById("result").innerText = "";
     countdown = 30;
     document.getElementById("timer").innerText = "Timer: " + countdown;
+    betLocked = false;
     
     timerInterval = setInterval(()=>{
         countdown--;
         document.getElementById("timer").innerText = "Timer: " + countdown;
+        if(countdown <= 5){
+            betLocked = true; // lock betting last 5s
+        }
         if(countdown <= 0){
             clearInterval(timerInterval);
             showResult();
@@ -155,16 +168,22 @@ function showResult(){
         }
     });
 
-    // Win = double bet
-    let winAmount = currentBet * 2;
-    let loseAmount = currentBet;
-
-    if(Math.random() < 0.5){ // 50% chance win
+    let win = Math.random() < 0.5; // 50% chance
+    if(win){
+        let winAmount = currentBet * 2;
         user.balance += winAmount;
         document.getElementById("result").innerText = "You Won ₹" + winAmount + "!";
+        user.history.push({square: winningIndex+1, bet: currentBet, result: "Win", time: new Date().toLocaleTimeString()});
     } else {
-        document.getElementById("result").innerText = "You Lost ₹" + loseAmount;
+        document.getElementById("result").innerText = "You Lost ₹" + currentBet;
+        user.history.push({square: winningIndex+1, bet: currentBet, result: "Lose", time: new Date().toLocaleTimeString()});
     }
-    update();
     currentBet = 0;
-  }
+    update();
+    renderHistory();
+}
+
+function renderHistory(){
+    const histDiv = document.getElementById("gameHistory");
+    histDiv.innerHTML = user.history.map(h=>`[${h.time}] Square ${h.square} Bet ₹${h.bet} → ${h.result}`).join("<br>");
+}
