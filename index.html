@@ -1,108 +1,98 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>22 Colour</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<link rel="stylesheet" href="style.css">
+<title>Wallet App</title>
 </head>
 
 <body>
 
-<header>
-<h2>22 COLOUR</h2>
-</header>
+<h2>Signup</h2>
 
-<div class="notice">
-⚠️ कृपया ध्यान दें: केवल 18 वर्ष या उससे अधिक आयु के उपयोगकर्ता ही इस गेम को खेल सकते हैं।
-</div>
+<input id="mobile" placeholder="Mobile number">
+<input id="password" type="password" placeholder="Password">
 
-<div class="winner">
-🏆 Rahul won ₹5000 &nbsp;&nbsp;
-🏆 Amit won ₹1200 &nbsp;&nbsp;
-🏆 Suresh won ₹8000 &nbsp;&nbsp;
-🏆 Pawan won ₹3000 &nbsp;&nbsp;
-🏆 Rakesh won ₹1500
-</div>
+<button onclick="signup()">
+Signup
+</button>
 
-<div class="wallet">
+<hr>
 
-<h3>Total Balance</h3>
-<h1 id="balance">₹0</h1>
+<h2>Login</h2>
 
-<button onclick="addMoney()">Deposit</button>
-<button onclick="withdraw()">Withdraw</button>
+<input id="loginMobile" placeholder="Mobile number">
+<input id="loginPass" type="password" placeholder="Password">
 
-</div>
+<button onclick="login()">
+Login
+</button>
 
-<h3 class="title">Games</h3>
+<h3 id="result"></h3>
 
-<div class="games">
+<script type="module">
 
-<div class="game">
-🎮 22 Colour
-</div>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-<div class="game">
-💣 Mines
-</div>
+import { getFirestore, collection, addDoc, getDocs } 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-<div class="game">
-✈️ Aviator
-</div>
+const firebaseConfig = {
+  apiKey: "AIzaSyDeWkiOnXncuckXQOs5gZkWRrHBGxG2WdY",
+  authDomain: "my-wallet-app-509be.firebaseapp.com",
+  projectId: "my-wallet-app-509be",
+  storageBucket: "my-wallet-app-509be.firebasestorage.app",
+  messagingSenderId: "300531016687",
+  appId: "1:300531016687:web:55bdfe5608d87f7debcc1a",
+  measurementId: "G-HYFJVSFYZP"
+};
 
-</div>
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
+// Signup function
+window.signup = async function(){
 
-<div id="activity" class="page">
+let mobile = document.getElementById("mobile").value
+let pass = document.getElementById("password").value
 
-<h3>Gift</h3>
+await addDoc(collection(db,"users"),{
 
-<input placeholder="Enter gift code">
-<button>Redeem</button>
+mobile: mobile,
+password: pass,
+balance: 0
 
-</div>
+})
 
+alert("Signup Success")
 
-<div id="promotion" class="page">
+}
 
-<h3>Your Referral ID</h3>
+// Login function
+window.login = async function(){
 
-<p id="refid"></p>
+let mobile = document.getElementById("loginMobile").value
+let pass = document.getElementById("loginPass").value
 
-<p>Share this code and earn bonus</p>
+const querySnapshot = await getDocs(collection(db,"users"))
 
-</div>
+querySnapshot.forEach((doc)=>{
 
+let data = doc.data()
 
-<div id="account" class="page">
+if(data.mobile==mobile && data.password==pass){
 
-<h3>Account</h3>
+document.getElementById("result").innerText =
+"Login success | Wallet balance: "+data.balance
 
-<p id="userid"></p>
+}
 
-<button onclick="logout()">Logout</button>
+})
 
-</div>
+}
 
-
-<footer>
-
-<button onclick="showPage('home')">🏠 Home</button>
-
-<button onclick="showPage('activity')">📊 Activity</button>
-
-<button onclick="showPage('promotion')">🎁 Promotion</button>
-
-<button onclick="showPage('account')">👤 Account</button>
-
-</footer>
-
-
-<script src="script.js"></script>
+</script>
 
 </body>
-</html>🎁
+</html></html>🎁
 <p>Promotion</p>
 </div>
 
