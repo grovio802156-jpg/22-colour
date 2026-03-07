@@ -1,106 +1,108 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>22 Colour</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <link rel="stylesheet" href="style.css">
-<script src="script.js"></script>
 </head>
 
 <body>
 
-<!-- HEADER -->
-
-<div class="header">
-
-<div class="logo">
-22 COLOUR
-</div>
-
-<div class="download">
-⬇
-</div>
-
-</div>
-
-<!-- NOTICE -->
+<header>
+<h2>22 COLOUR</h2>
+</header>
 
 <div class="notice">
-<marquee>
-⚠ If you have not received withdrawal within 3 days contact support
-</marquee>
+⚠️ कृपया ध्यान दें: केवल 18 वर्ष या उससे अधिक आयु के उपयोगकर्ता ही इस गेम को खेल सकते हैं।
 </div>
 
-<!-- BANNER -->
-
-<div class="banner">
-
-<img src="https://picsum.photos/400/200">
-
+<div class="winner">
+🏆 Rahul won ₹5000 &nbsp;&nbsp;
+🏆 Amit won ₹1200 &nbsp;&nbsp;
+🏆 Suresh won ₹8000 &nbsp;&nbsp;
+🏆 Pawan won ₹3000 &nbsp;&nbsp;
+🏆 Rakesh won ₹1500
 </div>
-
-<!-- WALLET -->
 
 <div class="wallet">
 
-<div class="balance">
+<h3>Total Balance</h3>
+<h1 id="balance">₹0</h1>
 
-Wallet Balance
-
-<h2 id="balance">₹1200</h2>
-
-</div>
-
-<button class="deposit" onclick="deposit()">Deposit</button>
-<button class="withdraw" onclick="withdraw()">Withdraw</button>
+<button onclick="addMoney()">Deposit</button>
+<button onclick="withdraw()">Withdraw</button>
 
 </div>
 
-<!-- GAMES -->
-
-<h3 class="title">Recommended Games</h3>
+<h3 class="title">Games</h3>
 
 <div class="games">
 
-<div class="game" onclick="openGame('22 Colour')">
-
-<img src="https://picsum.photos/100">
-<p>22 Colour</p>
-
+<div class="game">
+🎮 22 Colour
 </div>
 
-<div class="game" onclick="openGame('Mines')">
-
-<img src="https://picsum.photos/101">
-<p>Mines</p>
-
+<div class="game">
+💣 Mines
 </div>
 
-<div class="game" onclick="openGame('Aviator')">
-
-<img src="https://picsum.photos/102">
-<p>Aviator</p>
-
+<div class="game">
+✈️ Aviator
 </div>
 
 </div>
 
-<!-- BOTTOM MENU -->
 
-<div class="bottom">
+<div id="activity" class="page">
 
-<div onclick="home()">
-🏠
-<p>Home</p>
+<h3>Gift</h3>
+
+<input placeholder="Enter gift code">
+<button>Redeem</button>
+
 </div>
 
-<div onclick="activity()">
-📊
-<p>Activity</p>
+
+<div id="promotion" class="page">
+
+<h3>Your Referral ID</h3>
+
+<p id="refid"></p>
+
+<p>Share this code and earn bonus</p>
+
 </div>
 
-<div onclick="promotion()">
-🎁
+
+<div id="account" class="page">
+
+<h3>Account</h3>
+
+<p id="userid"></p>
+
+<button onclick="logout()">Logout</button>
+
+</div>
+
+
+<footer>
+
+<button onclick="showPage('home')">🏠 Home</button>
+
+<button onclick="showPage('activity')">📊 Activity</button>
+
+<button onclick="showPage('promotion')">🎁 Promotion</button>
+
+<button onclick="showPage('account')">👤 Account</button>
+
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>🎁
 <p>Promotion</p>
 </div>
 
