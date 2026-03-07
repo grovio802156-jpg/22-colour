@@ -1,59 +1,58 @@
 body{
 margin:0;
 font-family:Arial;
-background:#0f172a;
-color:white;
+background:#f2f2f2;
 }
 
-.topbar{
-background:#1e293b;
-text-align:center;
+.header{
+display:flex;
+justify-content:space-between;
 padding:15px;
+background:white;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
 }
 
-.warning-bar{
-background:#dc2626;
-overflow:hidden;
-white-space:nowrap;
+.logo{
+font-size:22px;
+font-weight:bold;
+color:#ff3d3d;
 }
 
-.warning-text{
-display:inline-block;
-padding-left:100%;
-animation:scroll 12s linear infinite;
+.notice{
+background:#eee;
+padding:8px;
+font-size:13px;
 }
 
-@keyframes scroll{
-0%{transform:translateX(0)}
-100%{transform:translateX(-100%)}
-}
-
-.winner-bar{
-background:#111827;
-overflow:hidden;
-white-space:nowrap;
-}
-
-.winner-text{
-display:inline-block;
-padding-left:100%;
-animation:scroll2 15s linear infinite;
-}
-
-@keyframes scroll2{
-0%{transform:translateX(0)}
-100%{transform:translateX(-100%)}
+.banner img{
+width:100%;
 }
 
 .wallet{
-padding:10px;
-}
-
-.balance-box{
-background:#1f2937;
+background:white;
+margin:10px;
 padding:15px;
 border-radius:10px;
-text-align:center;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.deposit{
+background:#ffa500;
+border:none;
+padding:10px;
+border-radius:6px;
+color:white;
+}
+
+.withdraw{
+background:#ff3d3d;
+border:none;
+padding:10px;
+border-radius:6px;
+color:white;
 }
 
 .games{
@@ -64,33 +63,30 @@ padding:10px;
 }
 
 .game{
-height:110px;
+background:white;
+padding:15px;
 border-radius:10px;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:18px;
+text-align:center;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
 }
 
-.g1{background:linear-gradient(#22c55e,#4ade80)}
-.g2{background:linear-gradient(#9333ea,#c084fc)}
-.g3{background:linear-gradient(#2563eb,#60a5fa)}
-.g4{background:linear-gradient(#f59e0b,#fbbf24)}
+.game img{
+width:80px;
+border-radius:10px;
+}
 
 .bottom{
 position:fixed;
 bottom:0;
 width:100%;
-background:#1e293b;
+background:white;
 display:flex;
 justify-content:space-around;
-padding:10px;
+padding:10px 0;
+box-shadow:0 -2px 8px rgba(0,0,0,0.1);
 }
 
-.page{
-padding-bottom:80px;
-}
-
-.hidden{
-display:none;
+.bottom div{
+text-align:center;
+font-size:12px;
 }
