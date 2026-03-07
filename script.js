@@ -1,71 +1,69 @@
-let balance = 1200;
+let user = localStorage.getItem("user")
 
-function deposit(){
+if(!user){
 
-let amount = prompt("Enter deposit amount");
+let phone = prompt("Enter Phone Number")
 
-if(amount){
+let id = Math.floor(Math.random()*1000000)
 
-balance += parseInt(amount);
+let ref = "REF"+id
 
-updateBalance();
+let data = {
+phone:phone,
+id:id,
+ref:ref,
+balance:0
+}
+
+localStorage.setItem("user",JSON.stringify(data))
 
 }
+
+let data = JSON.parse(localStorage.getItem("user"))
+
+document.getElementById("userid").innerText = "User ID : "+data.id
+document.getElementById("refid").innerText = data.ref
+document.getElementById("balance").innerText = "₹"+data.balance
+
+
+function addMoney(){
+
+data.balance +=100
+
+update()
 
 }
 
 function withdraw(){
 
-let amount = prompt("Enter withdraw amount");
+data.balance -=100
 
-if(amount <= balance){
-
-balance -= parseInt(amount);
-
-updateBalance();
+update()
 
 }
 
-else{
+function update(){
 
-alert("Not enough balance");
+localStorage.setItem("user",JSON.stringify(data))
 
-}
-
-}
-
-function updateBalance(){
-
-document.getElementById("balance").innerText = "₹" + balance;
+document.getElementById("balance").innerText = "₹"+data.balance
 
 }
 
-function openGame(name){
 
-alert(name + " game starting");
+function logout(){
 
-}
+localStorage.removeItem("user")
 
-function home(){
-
-alert("Home Page");
+location.reload()
 
 }
 
-function activity(){
 
-alert("Activity Page");
+function showPage(p){
 
-}
+document.querySelectorAll(".page").forEach(e=>e.style.display="none")
 
-function promotion(){
-
-alert("Promotion Page");
-
-}
-
-function account(){
-
-alert("Account Page");
+document.getElementById(p).style.display="block"
 
 }
