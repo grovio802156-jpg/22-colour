@@ -5,29 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-body{font-family:Arial;margin:0;background:#111;color:#fff;text-align:center}
-header{background:#222;padding:12px}
-.notice{background:#333;padding:10px}
-.winner{background:#222;padding:8px;font-size:14px}
+body{margin:0;font-family:Arial;background:#111;color:#fff;text-align:center}
+header{background:#222;padding:12px;font-size:20px}
+.notice{background:#333;padding:10px;margin:10px;border-radius:6px}
+.winner{background:#222;padding:8px;font-size:14px;margin:10px;border-radius:6px;overflow:hidden;white-space:nowrap}
+.winner span{margin-right:30px}
 .wallet{background:#333;margin:15px;padding:15px;border-radius:10px}
-button{padding:10px 15px;margin:5px;border:none;border-radius:6px;background:orange;color:#fff}
-.games{display:flex;justify-content:center;gap:10px}
-.game{background:#444;padding:15px;border-radius:10px}
+button{padding:10px 15px;margin:5px;border:none;border-radius:6px;background:orange;color:#fff;cursor:pointer}
+input{padding:8px;margin:5px;border-radius:6px;border:none;width:80%}
+.games{display:flex;justify-content:center;gap:10px;margin:10px}
+.game{background:#444;padding:15px;border-radius:10px;width:100px}
 .page{display:none;padding:15px}
-footer{position:fixed;bottom:0;width:100%;background:#222;padding:8px}
-footer button{background:none;color:#fff}
-input{padding:8px;border:none;border-radius:6px;margin:5px}
+footer{position:fixed;bottom:0;width:100%;background:#222;padding:8px;display:flex;justify-content:space-around}
+footer button{background:none;color:#fff;font-size:18px}
 </style>
 </head>
-
 <body>
 
-<header>
-<h2>22 COLOUR</h2>
-</header>
-
+<!-- LOGIN PAGE -->
 <div id="loginPage">
-
+<h2>Login / Signup</h2>
 <h3>Signup</h3>
 <input id="mobile" placeholder="Mobile number"><br>
 <input id="password" type="password" placeholder="Password"><br>
@@ -37,19 +34,27 @@ input{padding:8px;border:none;border-radius:6px;margin:5px}
 <input id="lmobile" placeholder="Mobile number"><br>
 <input id="lpassword" type="password" placeholder="Password"><br>
 <button onclick="login()">Login</button>
-
 </div>
 
+<!-- MAIN APP -->
 <div id="app" style="display:none">
 
-<div id="home" class="page" style="display:block">
+<header>
+<h2>22 COLOUR</h2>
+</header>
 
+<!-- Home Page -->
+<div id="home" class="page" style="display:block">
 <div class="notice">
 ⚠️ केवल 18 वर्ष से अधिक उपयोगकर्ता ही खेल सकते हैं
 </div>
 
-<div class="winner">
-🏆 Rahul ₹5000 &nbsp; 🏆 Amit ₹1200 &nbsp; 🏆 Suresh ₹8000
+<div class="winner" id="winnerBanner">
+<span>🏆 Rahul ₹5000</span>
+<span>🏆 Amit ₹1200</span>
+<span>🏆 Suresh ₹8000</span>
+<span>🏆 Pawan ₹3000</span>
+<span>🏆 Rakesh ₹1500</span>
 </div>
 
 <div class="wallet">
@@ -65,31 +70,30 @@ input{padding:8px;border:none;border-radius:6px;margin:5px}
 <div class="game">💣 Mines</div>
 <div class="game">✈️ Aviator</div>
 </div>
-
 </div>
 
-
+<!-- Activity Page -->
 <div id="activity" class="page">
 <h3>Gift Code</h3>
-<input placeholder="Enter gift code">
+<input placeholder="Enter gift code"><br>
 <button>Redeem</button>
 </div>
 
-
+<!-- Promotion Page -->
 <div id="promotion" class="page">
 <h3>Your Referral ID</h3>
 <p id="refid"></p>
 <p>Share and earn bonus</p>
 </div>
 
-
+<!-- Account Page -->
 <div id="account" class="page">
 <h3>Account</h3>
 <p id="userid"></p>
 <button onclick="logout()">Logout</button>
 </div>
 
-
+<!-- Footer Navigation -->
 <footer>
 <button onclick="showPage('home')">🏠 Home</button>
 <button onclick="showPage('activity')">📊 Activity</button>
@@ -100,21 +104,25 @@ input{padding:8px;border:none;border-radius:6px;margin:5px}
 </div>
 
 <script>
+let balance = 0;
 
-let balance=0
-
+// Signup
 function signup(){
 let m=document.getElementById("mobile").value
 let p=document.getElementById("password").value
+if(m && p){
 localStorage.setItem("mobile",m)
 localStorage.setItem("pass",p)
-alert("Signup successful")
+alert("Signup Successful")
+}else{
+alert("Enter mobile & password")
+}
 }
 
+// Login
 function login(){
 let m=document.getElementById("lmobile").value
 let p=document.getElementById("lpassword").value
-
 if(m==localStorage.getItem("mobile") && p==localStorage.getItem("pass")){
 document.getElementById("loginPage").style.display="none"
 document.getElementById("app").style.display="block"
@@ -125,109 +133,30 @@ alert("Wrong login")
 }
 }
 
-function deposit(){
-balance+=100
-document.getElementById("balance").innerText="₹"+balance
-}
+// Deposit
+function deposit(){balance+=100;document.getElementById("balance").innerText="₹"+balance}
 
-function withdraw(){
-if(balance>=100){
-balance-=100
-document.getElementById("balance").innerText="₹"+balance
-}else{
-alert("Low balance")
-}
-}
+// Withdraw
+function withdraw(){if(balance>=100){balance-=100;document.getElementById("balance").innerText="₹"+balance}else{alert("Low balance")}}
 
-function logout(){
-location.reload()
-}
+function logout(){location.reload()}
 
+// Page Navigation
 function showPage(page){
-
-let pages=document.querySelectorAll(".page")
-pages.forEach(p=>p.style.display="none")
-
+document.querySelectorAll(".page").forEach(p=>p.style.display="none")
 document.getElementById(page).style.display="block"
-
 }
 
+// Winner banner scroll
+let banner=document.getElementById("winnerBanner")
+if(banner){
+setInterval(()=>{
+banner.scrollLeft +=1
+if(banner.scrollLeft >= banner.scrollWidth/banner.childElementCount){
+banner.scrollLeft=0
+}
+},50)
+}
 </script>
-
-</body>
-</html><h1 id="balance">₹0</h1>
-
-<button onclick="deposit()">Deposit</button>
-<button onclick="withdraw()">Withdraw</button>
-
-</div>
-
-<h3>Games</h3>
-
-<div class="games">
-
-<div class="game">🎮 22 Colour</div>
-<div class="game">💣 Mines</div>
-<div class="game">✈️ Aviator</div>
-
-</div>
-
-<h3>Referral ID</h3>
-
-<p id="refid"></p>
-
-<button onclick="logout()">Logout</button>
-
-</div>
-
-<script>
-
-let balance = 0
-
-function signup(){
-let m=document.getElementById("mobile").value
-let p=document.getElementById("password").value
-localStorage.setItem("mobile",m)
-localStorage.setItem("pass",p)
-alert("Signup Successful")
-}
-
-function login(){
-let m=document.getElementById("lmobile").value
-let p=document.getElementById("lpassword").value
-
-if(m==localStorage.getItem("mobile") && p==localStorage.getItem("pass")){
-document.getElementById("loginPage").style.display="none"
-document.getElementById("app").style.display="block"
-document.getElementById("refid").innerText="REF"+Math.floor(Math.random()*999999)
-}else{
-alert("Wrong Login")
-}
-}
-
-function deposit(){
-balance+=100
-document.getElementById("balance").innerText="₹"+balance
-}
-
-function withdraw(){
-if(balance>=100){
-balance-=100
-document.getElementById("balance").innerText="₹"+balance
-}else{
-alert("Low Balance")
-}
-}
-
-function logout(){
-location.reload()
-}
-
-</script>
-
-</body>
-</html>
-</div>
-
 </body>
 </html>
