@@ -3,7 +3,6 @@
 <head>
 <title>22 Colour</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <style>
 body{margin:0;font-family:Arial;background:#111;color:#fff;text-align:center}
 header{background:#222;padding:12px;font-size:20px}
@@ -20,9 +19,10 @@ footer{position:fixed;bottom:0;width:100%;background:#222;padding:8px;display:fl
 footer button{background:none;color:#fff;font-size:18px}
 
 /* Colour game squares */
-.square{width:100px;height:100px;border-radius:8px;cursor:pointer;display:inline-block;margin:5px;transition:0.2s;}
+.square{width:100px;height:100px;border-radius:8px;cursor:pointer;display:inline-block;margin:5px;transition:0.3s;}
 .square.selected{border:3px solid yellow;}
 .square.highlight{border:3px solid red;transform:scale(1.2);}
+.square.blocked{opacity:0.5;pointer-events:none;}
 
 /* Overlay */
 #colourOverlay{
@@ -37,7 +37,7 @@ footer button{background:none;color:#fff;font-size:18px}
 }
 #colourOverlay h2{margin:10px}
 #timer{font-size:22px;margin:10px;}
-#history{max-height:200px;overflow-y:auto;text-align:left;margin:10px;background:#222;padding:10px;border-radius:6px;}
+#history,#myHistory{max-height:200px;overflow-y:auto;text-align:left;margin:10px;background:#222;padding:10px;border-radius:6px;}
 </style>
 </head>
 <body>
@@ -63,7 +63,6 @@ footer button{background:none;color:#fff;font-size:18px}
 <h2>22 COLOUR</h2>
 </header>
 
-<!-- Home Page -->
 <div id="home" class="page" style="display:block">
 <div class="notice">⚠️ केवल 18 वर्ष से अधिक उपयोगकर्ता ही खेल सकते हैं</div>
 
@@ -91,27 +90,6 @@ footer button{background:none;color:#fff;font-size:18px}
 
 </div>
 
-<!-- Activity Page -->
-<div id="activity" class="page">
-<h3>Gift Code</h3>
-<input placeholder="Enter gift code"><br>
-<button>Redeem</button>
-</div>
-
-<!-- Promotion Page -->
-<div id="promotion" class="page">
-<h3>Your Referral ID</h3>
-<p id="refid"></p>
-<p>Share and earn bonus</p>
-</div>
-
-<!-- Account Page -->
-<div id="account" class="page">
-<h3>Account</h3>
-<p id="userid"></p>
-<button onclick="logout()">Logout</button>
-</div>
-
 <!-- Colour Game Overlay -->
 <div id="colourOverlay">
 <h2>🎮 22 Colour Game</h2>
@@ -131,9 +109,10 @@ footer button{background:none;color:#fff;font-size:18px}
 <div id="message" style="margin:10px;font-weight:bold;"></div>
 <h4>History</h4>
 <div id="history"></div>
+<h4>My History</h4>
+<div id="myHistory"></div>
 </div>
 
-<!-- Footer Navigation -->
 <footer>
 <button onclick="showPage('home')">🏠 Home</button>
 <button onclick="showPage('activity')">📊 Activity</button>
@@ -158,7 +137,7 @@ function showPage(page){document.querySelectorAll(".page").forEach(p=>p.style.di
 let banner=document.getElementById("winnerBanner")
 if(banner){setInterval(()=>{banner.scrollLeft+=1;if(banner.scrollLeft>=banner.scrollWidth/banner.childElementCount){banner.scrollLeft=0}},50)}
 
-/* ---------------- 22 Colour Overlay Logic ---------------- */
+/* 22 Colour Game with My History & Spring animation */
 let colourSquares=[];
 let pickedIndex;
 let currentBet=1;
@@ -166,6 +145,7 @@ let selectedIndexes=[];
 let countdown=30;
 let timerInterval;
 let historyArr=[];
+let myHistoryArr=[];
 
 function openColourGame(){
     document.getElementById("colourOverlay").style.display="block";
@@ -180,7 +160,8 @@ function initColourGame(){
     for(let i=0;i<9;i++){
         let sq=document.createElement("div");
         sq.className="square"; sq.dataset.index=i; sq.style.backgroundColor=randomColor();
-        sq.onclick=()=>{selectSquare(i)}; container.appendChild(sq); colourSquares.push(sq);
+        sq.onclick=()=>{selectSquare(i)};
+        container.appendChild(sq); colourSquares.push(sq);
     }
     document.getElementById("message").innerText="";
     document.getElementById("balanceOverlay").innerText="Balance: ₹"+balance;
@@ -191,40 +172,68 @@ function initColourGame(){
 
 function randomColor(){let r=Math.floor(Math.random()*256);let g=Math.floor(Math.random()*256);let b=Math.floor(Math.random()*256);return 'rgb('+r+','+g+','+b+')';}
 
-function selectSquare(i){if(!selectedIndexes.includes(i)) selectedIndexes.push(i);colourSquares[i].classList.add("selected");}
+function selectSquare(i){
+    if(selectedIndexes.includes(i) || colourSquares[i].classList.contains("blocked")) return;
+    selectedIndexes.push(i); colourSquares[i].classList.add("selected");
+    saveMyHistory(i);
+}
 
+// Bet functions
 function setBet(a){currentBet=a;document.getElementById("customBet").value='';}
 function setCustomBet(){let v=parseInt(document.getElementById("customBet").value);if(v>0) currentBet=v;}
 
+// Timer
 function timerTick(){
     countdown--;
-    document.getElementById("timer").innerText="⏳ "+countdown;
-    if(countdown>10) document.getElementById("timer").style.color="lime";
-    else if(countdown>5) document.getElementById("timer").style.color="orange";
-    else document.getElementById("timer").style.color="red";
+    let timerEl=document.getElementById("timer");
+    timerEl.innerText="⏳ "+countdown;
+    if(countdown>10) timerEl.style.color="lime";
+    else if(countdown>5) timerEl.style.color="orange";
+    else timerEl.style.color="red";
 
     if(countdown<=5){
         selectedIndexes.forEach(i=>colourSquares[i].classList.add("highlight"));
     }
 
-    if(countdown<=0){finalizeRound(); countdown=30;}
+    if(countdown<=0){
+        finalizeRound();
+        countdown=30;
+    }
 }
 
+// Finalize Round
 function finalizeRound(){
-    if(selectedIndexes.length===0){document.getElementById("message").innerText="No Bet"; return;}
-    selectedIndexes.forEach(i=>{
-        let win=i===pickedIndex;
-        if(win) balance+=currentBet*2;
-        else balance-=currentBet;
-        let time=new Date().toLocaleTimeString();
-        historyArr.unshift('[ '+time+' ] Square '+(i+1)+' Bet ₹'+currentBet+' → '+(win?"WIN":"LOSE"));
-    });
-    document.getElementById("balance").innerText="₹"+balance;
-    document.getElementById("balanceOverlay").innerText="Balance: ₹"+balance;
-    document.getElementById("history").innerHTML=historyArr.join("<br>");
+    if(selectedIndexes.length>0){
+        selectedIndexes.forEach(i=>{
+            let win=i===pickedIndex;
+            if(win) balance+=currentBet*2;
+            else balance-=currentBet;
+
+            let time=new Date().toLocaleTimeString();
+            historyArr.unshift('[ '+time+' ] Square '+(i+1)+' Bet ₹'+currentBet+' → '+(win?"WIN":"LOSE"));
+            
+            // Spring animation & block color
+            colourSquares[i].classList.add("blocked");
+        });
+
+        // Keep only 100 entries
+        if(historyArr.length>100) historyArr=historyArr.slice(0,100);
+
+        document.getElementById("balance").innerText="₹"+balance;
+        document.getElementById("balanceOverlay").innerText="Balance: ₹"+balance;
+        document.getElementById("history").innerHTML=historyArr.join("<br>");
+    }
     document.getElementById("message").innerText="Round Finished! Correct: "+(pickedIndex+1);
-    colourSquares.forEach(sq=>sq.classList.remove("selected","highlight"));
     selectedIndexes=[]; pickedIndex=Math.floor(Math.random()*9);
+    colourSquares.forEach(sq=>sq.classList.remove("selected","highlight"));
+}
+
+// My History
+function saveMyHistory(i){
+    let time=new Date().toLocaleTimeString();
+    myHistoryArr.unshift('[ '+time+' ] Square '+(i+1)+' Bet ₹'+currentBet);
+    if(myHistoryArr.length>100) myHistoryArr=myHistoryArr.slice(0,100);
+    document.getElementById("myHistory").innerHTML=myHistoryArr.join("<br>");
 }
 </script>
 </body>
