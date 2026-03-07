@@ -18,8 +18,11 @@ input{padding:8px;margin:5px;border-radius:6px;border:none;width:80%}
 .page{display:none;padding:15px}
 footer{position:fixed;bottom:0;width:100%;background:#222;padding:8px;display:flex;justify-content:space-around}
 footer button{background:none;color:#fff;font-size:18px}
+
 /* Colour game squares */
-.square{width:100px;height:100px;border-radius:8px;cursor:pointer;display:inline-block;margin:5px;}
+.square{width:100px;height:100px;border-radius:8px;cursor:pointer;display:inline-block;margin:5px;transition:0.2s;}
+.square.selected{border:3px solid yellow;}
+.square.highlight{border:3px solid red;transform:scale(1.2);}
 </style>
 </head>
 <body>
@@ -68,32 +71,9 @@ footer button{background:none;color:#fff;font-size:18px}
 
 <h3>Games</h3>
 <div class="games">
-<!-- 22 Colour Game -->
-<div class="game" onclick="openColourGame()">🎮 22 Colour</div>
+<div class="game" onclick="openColourGamePage()">🎮 22 Colour</div>
 <div class="game">💣 Mines</div>
 <div class="game">✈️ Aviator</div>
-</div>
-
-<!-- Colour Game Container -->
-<div id="colourGame" style="display:none;margin-top:15px;background:#222;padding:10px;border-radius:10px;">
-  <h3>Pick the color</h3>
-  <div id="colorDisplay" style="margin:10px;font-weight:bold;">RGB(??,??,??)</div>
-  <div id="squaresContainer" style="display:grid;grid-template-columns:repeat(3,100px);gap:10px;justify-content:center;"></div>
-
-  <div style="margin-top:10px;">
-    <span>Bet: </span>
-    <button onclick="setBet(1)">₹1</button>
-    <button onclick="setBet(5)">₹5</button>
-    <button onclick="setBet(10)">₹10</button>
-    <button onclick="setBet(20)">₹20</button>
-    <input type="number" id="customBet" placeholder="Custom Bet" style="width:60px;">
-    <button onclick="setCustomBet()">Set</button>
-  </div>
-
-  <div id="timer" style="margin-top:10px;">⏳ 30s</div>
-  <div id="message" style="margin-top:10px;font-weight:bold;"></div>
-  <h3>History</h3>
-  <div id="history" style="text-align:left;margin-top:5px;"></div>
 </div>
 
 </div>
@@ -129,10 +109,117 @@ footer button{background:none;color:#fff;font-size:18px}
 
 </div>
 
+<!-- ---------------- 22 Colour Game Page ---------------- -->
 <script>
-let balance = 0;
+function openColourGamePage(){
+    let w = window.open("", "_blank", "width=400,height=700");
+    w.document.write(`
+    <html>
+    <head>
+    <title>22 Colour Game</title>
+    <style>
+    body{margin:0;font-family:Arial;background:#111;color:#fff;text-align:center;}
+    header{background:#222;padding:12px;font-size:20px;}
+    #balance{font-size:20px;margin:10px;}
+    .square{width:100px;height:100px;border-radius:8px;cursor:pointer;display:inline-block;margin:5px;transition:0.2s;}
+    .square.selected{border:3px solid yellow;}
+    .square.highlight{border:3px solid red;transform:scale(1.2);}
+    button{padding:8px 12px;margin:5px;border:none;border-radius:6px;background:orange;color:#fff;cursor:pointer;}
+    input{padding:6px;margin:5px;border-radius:6px;border:none;width:60px;text-align:center;}
+    #timer{font-size:22px;margin:10px;}
+    #history{max-height:200px;overflow-y:auto;text-align:left;margin:10px;background:#222;padding:10px;border-radius:6px;}
+    </style>
+    </head>
+    <body>
+    <header>🎮 22 Colour</header>
+    <div id="balance">Balance: ₹${balance}</div>
+    <div id="timer">⏳ 30</div>
+    <div id="squaresContainer"></div>
+    <div>
+    <span>Bet: </span>
+    <button onclick="setBet(1)">₹1</button>
+    <button onclick="setBet(5)">₹5</button>
+    <button onclick="setBet(10)">₹10</button>
+    <button onclick="setBet(20)">₹20</button>
+    <input type="number" id="customBet" placeholder="Custom">
+    <button onclick="setCustomBet()">Set</button>
+    </div>
+    <div id="message"></div>
+    <h4>History</h4>
+    <div id="history"></div>
 
-// Signup
+    <script>
+    let squaresContainer = document.getElementById("squaresContainer");
+    let squares = [];
+    let pickedIndex = Math.floor(Math.random()*9);
+    let currentBet=1;
+    let selectedIndexes = [];
+    let countdown=30;
+    let historyArr = [];
+    let balanceVal=${balance};
+
+    function randomColor(){let r=Math.floor(Math.random()*256);let g=Math.floor(Math.random()*256);let b=Math.floor(Math.random()*256);return 'rgb('+r+','+g+','+b+')';}
+
+    for(let i=0;i<9;i++){
+        let sq=document.createElement("div");
+        sq.className="square";
+        sq.style.backgroundColor=randomColor();
+        sq.dataset.index=i;
+        sq.onclick=()=>{selectSquare(i)};
+        squaresContainer.appendChild(sq);
+        squares.push(sq);
+    }
+
+    function selectSquare(i){
+        if(!selectedIndexes.includes(i)) selectedIndexes.push(i);
+        squares[i].classList.add("selected");
+    }
+
+    function setBet(a){currentBet=a;document.getElementById("customBet").value='';}
+    function setCustomBet(){let v=parseInt(document.getElementById("customBet").value);if(v>0) currentBet=v;}
+
+    setInterval(()=>{
+        countdown--;
+        document.getElementById("timer").innerText="⏳ "+countdown;
+        if(countdown>10) document.getElementById("timer").style.color="lime";
+        else if(countdown>5) document.getElementById("timer").style.color="orange";
+        else document.getElementById("timer").style.color="red";
+
+        if(countdown<=5){
+            selectedIndexes.forEach(i=>{squares[i].classList.add("highlight");});
+        }
+
+        if(countdown<=0){
+            finalizeBets();
+            countdown=30;
+        }
+    },1000);
+
+    function finalizeBets(){
+        if(selectedIndexes.length===0){document.getElementById("message").innerText="No Bet";return;}
+        selectedIndexes.forEach(i=>{
+            let win=i===pickedIndex;
+            if(win) balanceVal+=currentBet*2;
+            else balanceVal-=currentBet;
+            let time=new Date().toLocaleTimeString();
+            historyArr.unshift('[ '+time+' ] Square '+(i+1)+' Bet ₹'+currentBet+' → '+(win?"WIN":"LOSE"));
+        });
+        document.getElementById("balance").innerText="Balance: ₹"+balanceVal;
+        document.getElementById("history").innerHTML=historyArr.join("<br>");
+        document.getElementById("message").innerText="Round Finished! Correct: "+(pickedIndex+1);
+        squares.forEach(sq=>{sq.classList.remove("selected");sq.classList.remove("highlight");});
+        selectedIndexes=[];
+        pickedIndex=Math.floor(Math.random()*9);
+    }
+    </script>
+    </body>
+    </html>
+    `);
+}
+</script>
+
+<script>
+// Signup/Login/Deposit/Withdraw etc.
 function signup(){
 let m=document.getElementById("mobile").value
 let p=document.getElementById("password").value
@@ -144,8 +231,6 @@ alert("Signup Successful")
 alert("Enter mobile & password")
 }
 }
-
-// Login
 function login(){
 let m=document.getElementById("lmobile").value
 let p=document.getElementById("lpassword").value
@@ -158,127 +243,15 @@ document.getElementById("refid").innerText="REF"+Math.floor(Math.random()*999999
 alert("Wrong login")
 }
 }
-
-// Deposit
 function deposit(){balance+=100;document.getElementById("balance").innerText="₹"+balance}
-
-// Withdraw
 function withdraw(){if(balance>=100){balance-=100;document.getElementById("balance").innerText="₹"+balance}else{alert("Low balance")}}
-
 function logout(){location.reload()}
+function showPage(page){document.querySelectorAll(".page").forEach(p=>p.style.display="none");document.getElementById(page).style.display="block"}
 
-// Page Navigation
-function showPage(page){
-document.querySelectorAll(".page").forEach(p=>p.style.display="none")
-document.getElementById(page).style.display="block"
-}
-
-// Winner banner scroll
 let banner=document.getElementById("winnerBanner")
 if(banner){
-setInterval(()=>{
-banner.scrollLeft +=1
-if(banner.scrollLeft >= banner.scrollWidth/banner.childElementCount){
-banner.scrollLeft=0
+setInterval(()=>{banner.scrollLeft +=1;if(banner.scrollLeft >= banner.scrollWidth/banner.childElementCount){banner.scrollLeft=0}},50)
 }
-},50)
-}
-
-/* -------------------------------
-22 Colour Game Logic
-------------------------------- */
-let colourSquares = [];
-let pickedColour;
-let bets = {};
-let betLocked = false;
-let timeLeft = 30;
-let countdown;
-let currentBet = 1;
-let historyArr = [];
-
-function openColourGame(){
-  document.getElementById("colourGame").style.display="block";
-  setupColourGame();
-}
-
-function setupColourGame(){
-  const container = document.getElementById("squaresContainer");
-  container.innerHTML="";
-  colourSquares=[];
-  bets={};
-  pickedColour=randomColor();
-  document.getElementById("colorDisplay").innerText=pickedColour.toUpperCase();
-  for(let i=0;i<9;i++){
-    let sq=document.createElement("div");
-    sq.className="square";
-    sq.style.backgroundColor=randomColor();
-    sq.dataset.index=i;
-    sq.onclick=function(){ colourClick(sq,i); };
-    container.appendChild(sq);
-    colourSquares.push(sq);
-  }
-  betLocked=false;
-  timeLeft=30;
-  document.getElementById("timer").innerText="⏳ 30s";
-  document.getElementById("message").innerText="";
-}
-
-function randomColor(){
-  let r=Math.floor(Math.random()*256);
-  let g=Math.floor(Math.random()*256);
-  let b=Math.floor(Math.random()*256);
-  return `rgb(${r},${g},${b})`;
-}
-
-function colourClick(square,index){
-  if(betLocked) return;
-  bets[index]=currentBet;
-  square.style.border="3px solid yellow";
-  if(Object.keys(bets).length===1){
-    startColourTimer();
-  }
-}
-
-function startColourTimer(){
-  betLocked=true;
-  countdown=setInterval(()=>{
-    timeLeft--;
-    document.getElementById("timer").innerText=`⏳ ${timeLeft}s`;
-    if(timeLeft<=0){
-      clearInterval(countdown);
-      finalizeColourBets();
-    }
-  },1000);
-}
-
-function finalizeColourBets(){
-  colourSquares.forEach((sq,i)=>{
-    if(bets[i]){
-      if(sq.style.backgroundColor===pickedColour){
-        balance+=bets[i]*2;
-        historyArr.push({square:i+1,bet:bets[i],result:"Win",time:new Date().toLocaleTimeString()});
-      } else {
-        balance-=bets[i];
-        historyArr.push({square:i+1,bet:bets[i],result:"Lose",time:new Date().toLocaleTimeString()});
-      }
-    }
-  });
-  document.getElementById("balance").innerText="₹"+balance;
-  renderHistory();
-  document.getElementById("message").innerText="Round Finished! Correct: "+pickedColour;
-  betLocked=false;
-  bets={};
-  setupColourGame();
-}
-
-function setBet(amount){ if(!betLocked) currentBet=amount; document.getElementById("customBet").value=''; }
-function setCustomBet(){ if(!betLocked){ let val=parseInt(document.getElementById("customBet").value); if(val>0) currentBet=val; } }
-
-function renderHistory(){
-  const hDiv = document.getElementById("history");
-  hDiv.innerHTML = historyArr.map(e=>`[${e.time}] Square ${e.square} Bet ₹${e.bet} → ${e.result}`).join("<br>");
-}
-
 </script>
 </body>
-</html>
+  </html>
