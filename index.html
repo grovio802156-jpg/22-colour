@@ -1,106 +1,177 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Wallet App</title>
+<title>22 Colour</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+
+body{
+font-family:Arial;
+margin:0;
+background:#111;
+color:white;
+text-align:center;
+}
+
+header{
+background:#222;
+padding:10px;
+}
+
+.wallet{
+background:#333;
+margin:20px;
+padding:20px;
+border-radius:10px;
+}
+
+button{
+padding:10px 20px;
+margin:5px;
+border:none;
+border-radius:5px;
+background:orange;
+color:white;
+}
+
+input{
+padding:10px;
+margin:5px;
+border-radius:5px;
+border:none;
+}
+
+.games{
+display:flex;
+justify-content:center;
+gap:10px;
+}
+
+.game{
+background:#444;
+padding:15px;
+border-radius:10px;
+}
+
+footer{
+position:fixed;
+bottom:0;
+width:100%;
+background:#222;
+padding:10px;
+}
+
+footer button{
+background:none;
+color:white;
+}
+
+</style>
+
 </head>
 
 <body>
 
-<h2>Signup</h2>
+<header>
+<h2>22 COLOUR</h2>
+</header>
 
-<input id="mobile" placeholder="Mobile number">
-<input id="password" type="password" placeholder="Password">
+<div id="loginPage">
 
-<button onclick="signup()">
-Signup
-</button>
+<h3>Signup</h3>
 
-<hr>
+<input id="mobile" placeholder="Mobile number"><br>
+<input id="password" type="password" placeholder="Password"><br>
 
-<h2>Login</h2>
+<button onclick="signup()">Signup</button>
 
-<input id="loginMobile" placeholder="Mobile number">
-<input id="loginPass" type="password" placeholder="Password">
+<h3>Login</h3>
 
-<button onclick="login()">
-Login
-</button>
+<input id="lmobile" placeholder="Mobile number"><br>
+<input id="lpassword" type="password" placeholder="Password"><br>
 
-<h3 id="result"></h3>
+<button onclick="login()">Login</button>
 
-<script type="module">
+</div>
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+<div id="app" style="display:none">
 
-import { getFirestore, collection, addDoc, getDocs } 
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+<div class="wallet">
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDeWkiOnXncuckXQOs5gZkWRrHBGxG2WdY",
-  authDomain: "my-wallet-app-509be.firebaseapp.com",
-  projectId: "my-wallet-app-509be",
-  storageBucket: "my-wallet-app-509be.firebasestorage.app",
-  messagingSenderId: "300531016687",
-  appId: "1:300531016687:web:55bdfe5608d87f7debcc1a",
-  measurementId: "G-HYFJVSFYZP"
-};
+<h3>Total Balance</h3>
+<h1 id="balance">₹0</h1>
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+<button onclick="deposit()">Deposit</button>
+<button onclick="withdraw()">Withdraw</button>
 
-// Signup function
-window.signup = async function(){
+</div>
 
-let mobile = document.getElementById("mobile").value
-let pass = document.getElementById("password").value
+<h3>Games</h3>
 
-await addDoc(collection(db,"users"),{
+<div class="games">
 
-mobile: mobile,
-password: pass,
-balance: 0
+<div class="game">🎮 22 Colour</div>
+<div class="game">💣 Mines</div>
+<div class="game">✈️ Aviator</div>
 
-})
+</div>
 
-alert("Signup Success")
+<h3>Referral ID</h3>
 
+<p id="refid"></p>
+
+<button onclick="logout()">Logout</button>
+
+</div>
+
+<script>
+
+let balance = 0
+
+function signup(){
+let m=document.getElementById("mobile").value
+let p=document.getElementById("password").value
+localStorage.setItem("mobile",m)
+localStorage.setItem("pass",p)
+alert("Signup Successful")
 }
 
-// Login function
-window.login = async function(){
+function login(){
+let m=document.getElementById("lmobile").value
+let p=document.getElementById("lpassword").value
 
-let mobile = document.getElementById("loginMobile").value
-let pass = document.getElementById("loginPass").value
-
-const querySnapshot = await getDocs(collection(db,"users"))
-
-querySnapshot.forEach((doc)=>{
-
-let data = doc.data()
-
-if(data.mobile==mobile && data.password==pass){
-
-document.getElementById("result").innerText =
-"Login success | Wallet balance: "+data.balance
-
+if(m==localStorage.getItem("mobile") && p==localStorage.getItem("pass")){
+document.getElementById("loginPage").style.display="none"
+document.getElementById("app").style.display="block"
+document.getElementById("refid").innerText="REF"+Math.floor(Math.random()*999999)
+}else{
+alert("Wrong Login")
+}
 }
 
-})
+function deposit(){
+balance+=100
+document.getElementById("balance").innerText="₹"+balance
+}
 
+function withdraw(){
+if(balance>=100){
+balance-=100
+document.getElementById("balance").innerText="₹"+balance
+}else{
+alert("Low Balance")
+}
+}
+
+function logout(){
+location.reload()
 }
 
 </script>
 
 </body>
-</html></html>🎁
-<p>Promotion</p>
-</div>
-
-<div onclick="account()">
-👤
-<p>Account</p>
-</div>
-
+</html>
 </div>
 
 </body>
