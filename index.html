@@ -18,7 +18,6 @@ input{padding:8px;margin:5px;border-radius:6px;border:none;width:80%}
 .page{display:none;padding:15px}
 footer{position:fixed;bottom:0;width:100%;background:#222;padding:8px;display:flex;justify-content:space-around}
 footer button{background:none;color:#fff;font-size:18px}
-
 /* Colour game squares */
 .square{width:100px;height:100px;border-radius:8px;cursor:pointer;display:inline-block;margin:5px;}
 </style>
@@ -93,6 +92,8 @@ footer button{background:none;color:#fff;font-size:18px}
 
   <div id="timer" style="margin-top:10px;">⏳ 30s</div>
   <div id="message" style="margin-top:10px;font-weight:bold;"></div>
+  <h3>History</h3>
+  <div id="history" style="text-align:left;margin-top:5px;"></div>
 </div>
 
 </div>
@@ -193,6 +194,7 @@ let betLocked = false;
 let timeLeft = 30;
 let countdown;
 let currentBet = 1;
+let historyArr = [];
 
 function openColourGame(){
   document.getElementById("colourGame").style.display="block";
@@ -254,12 +256,15 @@ function finalizeColourBets(){
     if(bets[i]){
       if(sq.style.backgroundColor===pickedColour){
         balance+=bets[i]*2;
+        historyArr.push({square:i+1,bet:bets[i],result:"Win",time:new Date().toLocaleTimeString()});
       } else {
         balance-=bets[i];
+        historyArr.push({square:i+1,bet:bets[i],result:"Lose",time:new Date().toLocaleTimeString()});
       }
     }
   });
   document.getElementById("balance").innerText="₹"+balance;
+  renderHistory();
   document.getElementById("message").innerText="Round Finished! Correct: "+pickedColour;
   betLocked=false;
   bets={};
@@ -269,65 +274,11 @@ function finalizeColourBets(){
 function setBet(amount){ if(!betLocked) currentBet=amount; document.getElementById("customBet").value=''; }
 function setCustomBet(){ if(!betLocked){ let val=parseInt(document.getElementById("customBet").value); if(val>0) currentBet=val; } }
 
-</script>
-</body>
-</html>
-</div>
-
-<script>
-let balance = 0;
-
-// Signup
-function signup(){
-let m=document.getElementById("mobile").value
-let p=document.getElementById("password").value
-if(m && p){
-localStorage.setItem("mobile",m)
-localStorage.setItem("pass",p)
-alert("Signup Successful")
-}else{
-alert("Enter mobile & password")
-}
+function renderHistory(){
+  const hDiv = document.getElementById("history");
+  hDiv.innerHTML = historyArr.map(e=>`[${e.time}] Square ${e.square} Bet ₹${e.bet} → ${e.result}`).join("<br>");
 }
 
-// Login
-function login(){
-let m=document.getElementById("lmobile").value
-let p=document.getElementById("lpassword").value
-if(m==localStorage.getItem("mobile") && p==localStorage.getItem("pass")){
-document.getElementById("loginPage").style.display="none"
-document.getElementById("app").style.display="block"
-document.getElementById("userid").innerText=m
-document.getElementById("refid").innerText="REF"+Math.floor(Math.random()*999999)
-}else{
-alert("Wrong login")
-}
-}
-
-// Deposit
-function deposit(){balance+=100;document.getElementById("balance").innerText="₹"+balance}
-
-// Withdraw
-function withdraw(){if(balance>=100){balance-=100;document.getElementById("balance").innerText="₹"+balance}else{alert("Low balance")}}
-
-function logout(){location.reload()}
-
-// Page Navigation
-function showPage(page){
-document.querySelectorAll(".page").forEach(p=>p.style.display="none")
-document.getElementById(page).style.display="block"
-}
-
-// Winner banner scroll
-let banner=document.getElementById("winnerBanner")
-if(banner){
-setInterval(()=>{
-banner.scrollLeft +=1
-if(banner.scrollLeft >= banner.scrollWidth/banner.childElementCount){
-banner.scrollLeft=0
-}
-},50)
-}
 </script>
 </body>
 </html>
