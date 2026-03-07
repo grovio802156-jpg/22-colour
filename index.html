@@ -2,90 +2,114 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>22-colour</title>
+<title>22 Colour</title>
 <link rel="stylesheet" href="style.css">
+<script src="script.js"></script>
 </head>
 
 <body>
 
-<header class="topbar">
-<h1>22-colour</h1>
-</header>
+<!-- HEADER -->
 
-<div class="warning-bar">
-<div class="warning-text">
-⚠️ कृपया ध्यान दें: केवल 18 वर्ष या उससे अधिक आयु के उपयोगकर्ता ही इस गेम को खेल सकते हैं।
-</div>
+<div class="header">
+
+<div class="logo">
+22 COLOUR
 </div>
 
-<div class="winner-bar">
-<div class="winner-text">
-🏆 Rahul won ₹5000 &nbsp;
-🏆 Amit won ₹1200 &nbsp;
-🏆 Suresh won ₹8000 &nbsp;
-🏆 Pawan won ₹3000
-</div>
+<div class="download">
+⬇
 </div>
 
-<!-- HOME -->
-<div id="home" class="page">
+</div>
+
+<!-- NOTICE -->
+
+<div class="notice">
+<marquee>
+⚠ If you have not received withdrawal within 3 days contact support
+</marquee>
+</div>
+
+<!-- BANNER -->
+
+<div class="banner">
+
+<img src="https://picsum.photos/400/200">
+
+</div>
+
+<!-- WALLET -->
 
 <div class="wallet">
-<div class="balance-box">
-<span>Total Balance</span>
-<h2 id="balance">₹0</h2>
-</div>
+
+<div class="balance">
+
+Wallet Balance
+
+<h2 id="balance">₹1200</h2>
+
 </div>
 
-<h3 class="section">Games</h3>
+<button class="deposit" onclick="deposit()">Deposit</button>
+<button class="withdraw" onclick="withdraw()">Withdraw</button>
+
+</div>
+
+<!-- GAMES -->
+
+<h3 class="title">Recommended Games</h3>
 
 <div class="games">
 
-<div class="game g1">22 Colour</div>
-<div class="game g2">Mines</div>
-<div class="game g3">Aviator</div>
-<div class="game g4">Dice</div>
+<div class="game" onclick="openGame('22 Colour')">
+
+<img src="https://picsum.photos/100">
+<p>22 Colour</p>
 
 </div>
 
+<div class="game" onclick="openGame('Mines')">
+
+<img src="https://picsum.photos/101">
+<p>Mines</p>
+
 </div>
 
-<!-- ACTIVITY -->
+<div class="game" onclick="openGame('Aviator')">
 
-<div id="activity" class="page hidden">
-<h2>Activity</h2>
-<p>यहाँ आपकी game history दिखेगी</p>
+<img src="https://picsum.photos/102">
+<p>Aviator</p>
+
 </div>
 
-<!-- PROMOTION -->
-
-<div id="promotion" class="page hidden">
-<h2>Promotion</h2>
-<p>Invite friends and earn bonus</p>
-</div>
-
-<!-- ACCOUNT -->
-
-<div id="account" class="page hidden">
-<h2>Account</h2>
-<p>User Profile / Wallet / Settings</p>
 </div>
 
 <!-- BOTTOM MENU -->
 
 <div class="bottom">
 
-<div onclick="showPage('home')">🏠<br>Home</div>
-
-<div onclick="showPage('activity')">📊<br>Activity</div>
-
-<div onclick="showPage('promotion')">🎁<br>Promotion</div>
-
-<div onclick="showPage('account')">👤<br>Account</div>
-
+<div onclick="home()">
+🏠
+<p>Home</p>
 </div>
 
-<script src="script.js"></script>
+<div onclick="activity()">
+📊
+<p>Activity</p>
+</div>
+
+<div onclick="promotion()">
+🎁
+<p>Promotion</p>
+</div>
+
+<div onclick="account()">
+👤
+<p>Account</p>
+</div>
+
+</div>
 
 </body>
 </html>
