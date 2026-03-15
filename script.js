@@ -1,32 +1,86 @@
-let currentScreen = "screen1";
+let mode="html"
 
-function showScreen(id){
+let htmlCode=""
+let cssCode=""
+let jsCode=""
 
-document.querySelectorAll(".screen").forEach(s=>{
-s.classList.remove("active")
-})
+function setMode(type){
 
-document.getElementById(id).classList.add("active")
+mode=type
 
-currentScreen = id
+if(type=="html") codeArea.value=htmlCode
+if(type=="css") codeArea.value=cssCode
+if(type=="js") codeArea.value=jsCode
 
 }
 
-function addButton(){
+function updatePreview(){
 
-let btn = document.createElement("button")
+let code=codeArea.value
 
-btn.innerText = "Button"
+if(mode=="html") htmlCode=code
+if(mode=="css") cssCode=code
+if(mode=="js") jsCode=code
 
-document.getElementById(currentScreen).appendChild(btn)
+let finalCode=`
+
+<html>
+
+<style>${cssCode}</style>
+
+<body>
+
+${htmlCode}
+
+<script>${jsCode}<\/script>
+
+</body>
+
+</html>
+
+`
+
+result.srcdoc=finalCode
+
+checkError()
+
+}
+
+function checkError(){
+
+let text=codeArea.value
+
+let errors=[]
+
+if(text.includes("console.error")){
+
+errors.push("Console error detected")
+
+}
+
+errorBox.innerHTML=errors.join("<br>")
+
+}
+
+function newProject(){
+
+if(confirm("Start new project?")){
+
+htmlCode=""
+cssCode=""
+jsCode=""
+codeArea.value=""
+result.srcdoc=""
+
+}
 
 }
 
 function saveProject(){
 
-let data = document.querySelector(".phone").innerHTML
-
-localStorage.setItem("project",data)
+localStorage.setItem("html",htmlCode)
+localStorage.setItem("css",cssCode)
+localStorage.setItem("js",jsCode)
 
 alert("Project Saved")
 
@@ -34,21 +88,42 @@ alert("Project Saved")
 
 function exportProject(){
 
-let data = document.querySelector(".phone").innerHTML
+let file=`
 
-let blob = new Blob([data],{type:"text/html"})
+<!DOCTYPE html>
+<html>
+<style>${cssCode}</style>
+<body>
 
-let a = document.createElement("a")
+${htmlCode}
 
-a.href = URL.createObjectURL(blob)
+<script>${jsCode}<\/script>
 
-a.download = "app.html"
+</body>
+</html>
+
+`
+
+let blob=new Blob([file],{type:"text/html"})
+
+let a=document.createElement("a")
+
+a.href=URL.createObjectURL(blob)
+
+a.download="app.html"
 
 a.click()
 
-}}
+}
 
-function renderHistory(){
-    const histDiv = document.getElementById("gameHistory");
-    histDiv.innerHTML = user.history.map(h=>`[${h.time}] Square ${h.square} Bet ₹${h.bet} → ${h.result}`).join("<br>");
+function settings(){
+
+alert("Settings panel coming soon")
+
+}
+
+function dragDrop(){
+
+alert("Drag & Drop Builder Coming Soon")
+
 }
