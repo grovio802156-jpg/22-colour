@@ -1,165 +1,43 @@
-/* ==========================
-   Global Styles
-========================== */
-body { 
-    font-family: Arial, sans-serif; 
-    margin: 0; 
-    padding: 0; 
-    text-align: center; 
-    background: #f1f1f1; 
+body{
+font-family:Arial;
+margin:0;
+background:#111;
+color:white;
+text-align:center;
 }
 
-header { 
-    background: #222; 
-    color: #fff; 
-    padding: 10px; 
+header{
+background:#222;
+padding:20px;
 }
 
-.notice { 
-    background: #ffeb3b; 
-    padding: 10px; 
-    margin: 5px; 
-    font-weight: bold; 
-    overflow: hidden;
-    white-space: nowrap;
-    animation: slideNotice 15s linear infinite;
+.editor{
+padding:20px;
 }
 
-@keyframes slideNotice {
-    0% { transform: translateX(100%); }
-    100% { transform: translateX(-100%); }
+textarea{
+width:90%;
+height:200px;
+background:#000;
+color:#00ff88;
+font-size:16px;
+border:1px solid #444;
+padding:10px;
 }
 
-.winner { 
-    background: #e0e0e0; 
-    padding: 10px; 
-    margin: 5px; 
-    overflow-x: auto; 
-    white-space: nowrap; 
-    animation: scrollWinner 20s linear infinite;
+button{
+margin:10px;
+padding:10px 20px;
+border:none;
+background:#00ff88;
+color:black;
+font-weight:bold;
 }
 
-@keyframes scrollWinner {
-    0% { transform: translateX(100%); }
-    100% { transform: translateX(-100%); }
+iframe{
+width:90%;
+height:300px;
+background:white;
+border:none;
+margin-bottom:30px;
 }
-
-.wallet { 
-    background: #fff; 
-    padding: 10px; 
-    margin: 5px; 
-    border-radius: 10px;
-}
-
-.games { 
-    display: flex; 
-    justify-content: center; 
-    margin: 10px 0; 
-    gap: 10px; 
-}
-
-.game { 
-    background: #4caf50; 
-    color: #fff; 
-    padding: 10px; 
-    border-radius: 8px; 
-    cursor: pointer; 
-    flex: 1; 
-    max-width: 120px; 
-}
-
-.page { 
-    display: none; 
-}
-
-/* ==========================
-   Footer
-========================== */
-footer { 
-    position: fixed; 
-    bottom: 0; 
-    width: 100%; 
-    display: flex; 
-    justify-content: space-around; 
-    background: #222; 
-    color: #fff; 
-    padding: 10px; 
-}
-
-footer button { 
-    background: none; 
-    border: none; 
-    color: #fff; 
-    font-size: 16px; 
-    cursor: pointer; 
-}
-
-/* ==========================
-   22 Colour Game Styles
-========================== */
-.game-container { 
-    display: none; 
-    margin: 10px; 
-    padding: 10px; 
-    background: #fff; 
-    border-radius: 10px; 
-}
-
-.squares-container { 
-    display: grid; 
-    grid-template-columns: repeat(3, 100px); 
-    gap: 10px; 
-    justify-content: center; 
-    margin: 10px 0; 
-}
-
-.square { 
-    width: 100px; 
-    height: 100px; 
-    background: #ccc; 
-    cursor: pointer; 
-    border-radius: 8px; 
-    transition: 0.3s;
-}
-
-.square:hover { 
-    transform: scale(1.05);
-}
-
-.bet-options { 
-    margin: 10px 0; 
-}
-
-.bet-options button { 
-    margin: 5px; 
-    padding: 5px 10px; 
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    background: orange;
-    color: #fff;
-}
-
-#timer { 
-    font-size: 18px; 
-    margin: 10px 0; 
-    font-weight: bold;
-}
-
-/* ==========================
-   Responsive
-========================== */
-@media(max-width: 500px) {
-    .squares-container { 
-        grid-template-columns: repeat(2, 100px); 
-    }
-
-    .game { 
-        max-width: 80px; 
-        padding: 8px;
-    }
-
-    footer button { 
-        font-size: 14px; 
-    }
-  }
