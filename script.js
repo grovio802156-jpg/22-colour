@@ -1,106 +1,25 @@
-// ==========================
-// User & Wallet System
-// ==========================
-let user = JSON.parse(localStorage.getItem("user"));
+function runCode(){
 
-if(!user){
-    let phone = prompt("Enter Phone Number");
-    let id = Math.floor(Math.random()*1000000);
-    let ref = "REF"+id;
-    user = {
-        phone: phone,
-        id: id,
-        ref: ref,
-        balance: 0,
-        history: [] // added history array
-    };
-    localStorage.setItem("user", JSON.stringify(user));
+let code=document.getElementById("code").value;
+let preview=document.getElementById("preview");
+
+preview.srcdoc=code;
+
 }
 
-document.getElementById("userid").innerText = "User ID: " + user.id;
-document.getElementById("refid").innerText = user.ref;
-document.getElementById("balance").innerText = "₹" + user.balance;
+function downloadCode(){
 
-function addMoney(){
-    user.balance += 100;
-    update();
-}
+let code=document.getElementById("code").value;
 
-function withdraw(){
-    if(user.balance >= 100){
-        user.balance -= 100;
-        update();
-    } else {
-        alert("Low balance");
-    }
-}
+let blob=new Blob([code],{type:"text/html"});
+let a=document.createElement("a");
 
-function update(){
-    localStorage.setItem("user", JSON.stringify(user));
-    document.getElementById("balance").innerText = "₹" + user.balance;
-}
+a.href=URL.createObjectURL(blob);
+a.download="app.html";
 
-// ==========================
-// Logout
-// ==========================
-function logout(){
-    localStorage.removeItem("user");
-    location.reload();
-}
+a.click();
 
-// ==========================
-// Page Navigation
-// ==========================
-function showPage(page){
-    document.querySelectorAll(".page").forEach(p=>p.style.display="none");
-    document.getElementById(page).style.display="block";
-}
-
-// ==========================
-// Winner banner scroll
-// ==========================
-let banner = document.getElementById("winnerBanner");
-if(banner){
-    setInterval(()=>{
-        banner.scrollLeft +=1;
-        if(banner.scrollLeft >= banner.scrollWidth/banner.childElementCount){
-            banner.scrollLeft=0;
-        }
-    },50);
-}
-
-// ==========================
-// 22 Colour Game Logic
-// ==========================
-let gameContainer = document.createElement("div");
-gameContainer.className = "game-container";
-gameContainer.innerHTML = `
-<h3>22 Colour Game</h3>
-<div class="squares-container" id="squaresContainer"></div>
-<div class="bet-options">
-    <button onclick="placeBet(1)">₹1</button>
-    <button onclick="placeBet(5)">₹5</button>
-    <button onclick="placeBet(10)">₹10</button>
-    <button onclick="placeBet(20)">₹20</button>
-    <button onclick="placeBet(50)">₹50</button>
-    <button onclick="placeBet(100)">₹100</button>
-    <input type="number" id="customBet" placeholder="Custom" style="width:80px;">
-    <button onclick="placeCustomBet()">Bet</button>
-</div>
-<div id="timer">Timer: 30</div>
-<p id="result"></p>
-<h4>History</h4>
-<div id="gameHistory" style="text-align:left; max-height:150px; overflow:auto;"></div>
-`;
-document.body.appendChild(gameContainer);
-
-const squaresContainer = document.getElementById("squaresContainer");
-let squares = [];
-for(let i=0; i<9; i++){
-    let sq = document.createElement("div");
-    sq.className = "square";
-    sq.innerText = i+1;
-    squaresContainer.appendChild(sq);
+}    squaresContainer.appendChild(sq);
     squares.push(sq);
 }
 
