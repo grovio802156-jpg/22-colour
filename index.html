@@ -1,52 +1,64 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mobile App Builder</title>
+
+<title>App Builder</title>
 
 <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
 <header>
-<h2>My App Builder</h2>
 
-<input id="projectName" placeholder="Project Name">
+<div class="logo">APP BUILDER</div>
 
+<div class="menu">
+
+<button onclick="newProject()">New Project</button>
 <button onclick="saveProject()">Save</button>
-
+<button onclick="dragDrop()">Drag & Drop</button>
 <button onclick="exportProject()">Export</button>
+<button onclick="settings()">Settings</button>
+
+</div>
 
 </header>
 
-<div class="container">
+<div class="main">
 
-<div class="left">
+<div class="errors">
 
-<h3>Components</h3>
+<h3>Code Errors</h3>
 
-<button onclick="addButton()">Button</button>
-
-</div>
-
-<div class="phone">
-
-<div id="screen1" class="screen active"></div>
-
-<div id="screen2" class="screen"></div>
+<div id="errorBox"></div>
 
 </div>
 
-<div class="right">
+<div class="editor">
 
-<h3>Screens</h3>
-
-<button onclick="showScreen('screen1')">Screen1</button>
-
-<button onclick="showScreen('screen2')">Screen2</button>
+<textarea id="codeArea" oninput="updatePreview()"></textarea>
 
 </div>
+
+<div class="selector">
+
+<button onclick="setMode('html')" class="html">HTML</button>
+<button onclick="setMode('css')" class="css">CSS</button>
+<button onclick="setMode('js')" class="js">JS</button>
+
+</div>
+
+</div>
+
+<div class="preview">
+
+<h3>Live App Result</h3>
+
+<iframe id="result"></iframe>
 
 </div>
 
@@ -54,53 +66,6 @@
 
 </body>
 </html>}
-
-function addButton(){
-
-let btn=document.createElement("button");
-btn.innerText="Button";
-btn.className="element";
-btn.style.left="20px";
-btn.style.top="20px";
-
-makeDraggable(btn);
-
-document.getElementById("screen").appendChild(btn);
-
-}
-
-function addText(){
-
-let txt=document.createElement("div");
-txt.innerText="Text";
-txt.className="element";
-txt.style.left="20px";
-txt.style.top="60px";
-txt.style.color="black";
-
-makeDraggable(txt);
-
-document.getElementById("screen").appendChild(txt);
-
-}
-
-function addImage(){
-
-let img=document.createElement("img");
-img.src="https://via.placeholder.com/80";
-img.className="element";
-img.style.left="20px";
-img.style.top="100px";
-
-makeDraggable(img);
-
-document.getElementById("screen").appendChild(img);
-
-}
-
-function clearScreen(){
-document.getElementById("screen").innerHTML="";
-}
 
 function downloadApp(){
 
