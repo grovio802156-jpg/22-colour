@@ -1,106 +1,52 @@
-function runCode(){
+let currentScreen = "screen1";
 
-let code=document.getElementById("code").value;
-let preview=document.getElementById("preview");
+function showScreen(id){
 
-preview.srcdoc=code;
+document.querySelectorAll(".screen").forEach(s=>{
+s.classList.remove("active")
+})
+
+document.getElementById(id).classList.add("active")
+
+currentScreen = id
 
 }
 
-function downloadCode(){
+function addButton(){
 
-let code=document.getElementById("code").value;
+let btn = document.createElement("button")
 
-let blob=new Blob([code],{type:"text/html"});
-let a=document.createElement("a");
+btn.innerText = "Button"
 
-a.href=URL.createObjectURL(blob);
-a.download="app.html";
+document.getElementById(currentScreen).appendChild(btn)
 
-a.click();
-
-}    squaresContainer.appendChild(sq);
-    squares.push(sq);
 }
 
-let currentBet = 0;
-let timerInterval;
-let countdown = 30;
-let betLocked = false;
+function saveProject(){
 
-function placeBet(amount){
-    if(betLocked) return; // lock after 5s
-    if(user.balance < amount){
-        alert("Low balance");
-        return;
-    }
-    currentBet = amount;
-    user.balance -= amount;
-    update();
-    startGame();
+let data = document.querySelector(".phone").innerHTML
+
+localStorage.setItem("project",data)
+
+alert("Project Saved")
+
 }
 
-function placeCustomBet(){
-    if(betLocked) return;
-    let val = parseInt(document.getElementById("customBet").value);
-    if(!val || val<=0){
-        alert("Enter valid amount");
-        return;
-    }
-    if(user.balance < val){
-        alert("Low balance");
-        return;
-    }
-    currentBet = val;
-    user.balance -= val;
-    update();
-    startGame();
-}
+function exportProject(){
 
-function startGame(){
-    document.getElementById("result").innerText = "";
-    countdown = 30;
-    document.getElementById("timer").innerText = "Timer: " + countdown;
-    betLocked = false;
-    
-    timerInterval = setInterval(()=>{
-        countdown--;
-        document.getElementById("timer").innerText = "Timer: " + countdown;
-        if(countdown <= 5){
-            betLocked = true; // lock betting last 5s
-        }
-        if(countdown <= 0){
-            clearInterval(timerInterval);
-            showResult();
-        }
-    }, 1000);
-}
+let data = document.querySelector(".phone").innerHTML
 
-function showResult(){
-    // Randomly select winning square
-    let winningIndex = Math.floor(Math.random()*squares.length);
-    squares.forEach((sq, idx)=>{
-        if(idx === winningIndex){
-            sq.style.background = "green";
-        } else {
-            sq.style.background = "#ccc";
-        }
-    });
+let blob = new Blob([data],{type:"text/html"})
 
-    let win = Math.random() < 0.5; // 50% chance
-    if(win){
-        let winAmount = currentBet * 2;
-        user.balance += winAmount;
-        document.getElementById("result").innerText = "You Won ₹" + winAmount + "!";
-        user.history.push({square: winningIndex+1, bet: currentBet, result: "Win", time: new Date().toLocaleTimeString()});
-    } else {
-        document.getElementById("result").innerText = "You Lost ₹" + currentBet;
-        user.history.push({square: winningIndex+1, bet: currentBet, result: "Lose", time: new Date().toLocaleTimeString()});
-    }
-    currentBet = 0;
-    update();
-    renderHistory();
-}
+let a = document.createElement("a")
+
+a.href = URL.createObjectURL(blob)
+
+a.download = "app.html"
+
+a.click()
+
+}}
 
 function renderHistory(){
     const histDiv = document.getElementById("gameHistory");
