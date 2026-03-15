@@ -1,43 +1,50 @@
 body{
 font-family:Arial;
-margin:0;
 background:#111;
 color:white;
-text-align:center;
+margin:0;
 }
 
 header{
 background:#222;
-padding:20px;
-}
-
-.editor{
-padding:20px;
-}
-
-textarea{
-width:90%;
-height:200px;
-background:#000;
-color:#00ff88;
-font-size:16px;
-border:1px solid #444;
 padding:10px;
+display:flex;
+gap:10px;
 }
 
-button{
-margin:10px;
-padding:10px 20px;
-border:none;
-background:#00ff88;
-color:black;
-font-weight:bold;
+.container{
+display:flex;
+justify-content:center;
+margin-top:20px;
+gap:20px;
 }
 
-iframe{
-width:90%;
-height:300px;
+.left,.right{
+width:120px;
+background:#222;
+padding:10px;
+border-radius:6px;
+}
+
+.phone{
+width:230px;
+height:420px;
 background:white;
-border:none;
-margin-bottom:30px;
+border:6px solid #444;
+border-radius:20px;
+padding:10px;
+overflow:auto;
+}
+
+.screen{
+display:none;
+}
+
+.screen.active{
+display:block;
+}
+
+.phone button{
+margin:5px;
+padding:10px;
 }
