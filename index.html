@@ -1,44 +1,176 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mobile App Builder</title>
-<link rel="stylesheet" href="style.css">
+
+<style>
+body{
+font-family:Arial;
+background:#111;
+color:white;
+text-align:center;
+}
+
+.container{
+display:flex;
+justify-content:center;
+gap:20px;
+margin-top:20px;
+flex-wrap:wrap;
+}
+
+.panel{
+background:#222;
+padding:10px;
+border-radius:6px;
+width:140px;
+}
+
+.panel button{
+width:100%;
+margin:5px 0;
+padding:10px;
+background:#00ff88;
+border:none;
+font-weight:bold;
+}
+
+.phone{
+width:230px;
+height:420px;
+background:white;
+border:6px solid #444;
+border-radius:20px;
+position:relative;
+overflow:hidden;
+}
+
+.element{
+position:absolute;
+cursor:move;
+}
+
+</style>
 </head>
 
 <body>
 
-<header>
-<h1>Mobile App Builder</h1>
-<p>Create Your App Using Code</p>
-</header>
+<h2>Advanced Mobile App Builder</h2>
 
-<div class="editor">
+<div class="container">
 
-<select id="language">
-<option value="html">HTML</option>
-<option value="css">CSS</option>
-<option value="js">JavaScript</option>
-</select>
+<div class="panel">
 
-<textarea id="code">
-<h1>Hello App</h1>
-<p>Your first mobile web app</p>
-</textarea>
+<h4>Components</h4>
 
-<div class="buttons">
-<button onclick="runCode()">Run</button>
-<button onclick="downloadCode()">Download</button>
-</div>
+<button onclick="addButton()">Button</button>
+<button onclick="addText()">Text</button>
+<button onclick="addImage()">Image</button>
+<button onclick="clearScreen()">Clear</button>
+<button onclick="downloadApp()">Export</button>
 
 </div>
 
-<h2>Preview</h2>
+<div class="phone" id="screen"></div>
 
-<iframe id="preview"></iframe>
+</div>
 
-<script src="script.js"></script>
+<script>
+
+function makeDraggable(el){
+
+let offsetX, offsetY;
+
+el.addEventListener("touchstart",function(e){
+
+offsetX=e.touches[0].clientX-el.offsetLeft;
+offsetY=e.touches[0].clientY-el.offsetTop;
+
+document.ontouchmove=function(e){
+
+el.style.left=(e.touches[0].clientX-offsetX)+"px";
+el.style.top=(e.touches[0].clientY-offsetY)+"px";
+
+};
+
+});
+
+document.ontouchend=function(){
+document.ontouchmove=null;
+};
+
+}
+
+function addButton(){
+
+let btn=document.createElement("button");
+btn.innerText="Button";
+btn.className="element";
+btn.style.left="20px";
+btn.style.top="20px";
+
+makeDraggable(btn);
+
+document.getElementById("screen").appendChild(btn);
+
+}
+
+function addText(){
+
+let txt=document.createElement("div");
+txt.innerText="Text";
+txt.className="element";
+txt.style.left="20px";
+txt.style.top="60px";
+txt.style.color="black";
+
+makeDraggable(txt);
+
+document.getElementById("screen").appendChild(txt);
+
+}
+
+function addImage(){
+
+let img=document.createElement("img");
+img.src="https://via.placeholder.com/80";
+img.className="element";
+img.style.left="20px";
+img.style.top="100px";
+
+makeDraggable(img);
+
+document.getElementById("screen").appendChild(img);
+
+}
+
+function clearScreen(){
+document.getElementById("screen").innerHTML="";
+}
+
+function downloadApp(){
+
+let html=document.getElementById("screen").innerHTML;
+
+let file=`<!DOCTYPE html>
+<html>
+<body>
+${html}
+</body>
+</html>`;
+
+let blob=new Blob([file],{type:"text/html"});
+let a=document.createElement("a");
+
+a.href=URL.createObjectURL(blob);
+a.download="app.html";
+
+a.click();
+
+}
+
+</script>
 
 </body>
 </html>
